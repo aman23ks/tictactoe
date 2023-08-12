@@ -1,0 +1,12 @@
+.square{
+    border: 1px solid;
+    height: 100px;
+    width: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.winning {
+    background-color: lightgreen;
+}

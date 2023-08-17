@@ -1,6 +1,3 @@
-// There are redundancies in the code for example you use computerMove insted of isXturn becuase we only want the computer to move.
-// Modularize the code more
-
 import React, { useState, useCallback, useEffect } from "react";
 import Square from "../Square/Square";
 import classes from "./Board.module.css";
@@ -30,9 +27,10 @@ const Board = () => {
       if (state[a] != null && state[a] === state[b] && state[a] === state[c]) {
         setWinningSequence([a, b, c]);
         return state[a];
-      } else if (!state.includes(null)) {
-        return "draw";
-      }
+      } 
+    }
+    if (!state.includes(null)) {
+      return "draw";
     }
     setWinningSequence([]);
     return false;
@@ -43,11 +41,14 @@ const Board = () => {
   }, [state, checkWinner]);
 
   const botMove = useCallback(async () => {
+    let check = checkWinner()
+    if(check){
+      return
+    }
     if (computerMove === true && isWinner === false) {
       const copyState = [...state];
-      const proxyUrl = "https://cors-anywhere.herokuapp.com/";
       const apiUrl = "https://hiring-react-assignment.vercel.app/api/bot";
-      const response = await fetch(proxyUrl + apiUrl, {
+      const response = await fetch(apiUrl, {
         method: "POST",
         body: JSON.stringify(copyState),
         headers: {
@@ -78,9 +79,7 @@ const Board = () => {
   }, [state, computerMove]);
 
   useEffect(() => {
-    if (isWinner === false){
-        botMove();
-    }
+    botMove();
   }, [botMove]);
 
   const squareClickHandler = (index) => {
